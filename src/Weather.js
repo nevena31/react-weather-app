@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import FormattedDate from "./FormattedDate";
+import WeatherInfo from "./WeatherInfo";
 import axios from "axios";
 import "./Weather.css";
 
@@ -9,13 +10,14 @@ export default function Weather(props) {
     console.log(response.data);
     setWeatherData({
       ready: true,
-      temperature: response.data.main.temp,
-      humidity: response.data.main.humidity,
+      temperature: response.data.temperature,
+      humidity: response.data.temperature.humidity,
       date: new Date(response.data.dt * 1000),
-      description: response.data.weather[0].description,
-      iconUrl: "https://ssl.gstatic.com/onebox/weather/64/partly_cloudy.png",
+      description: response.data.condition.description,
+      iconUrl:
+        "http://shecodes-assets.s3.amazonaws.com/api/weather/icons/few-clouds-day.png",
       wind: response.data.wind.speed,
-      city: response.data.name,
+      city: response.data.city,
     });
   }
 
@@ -41,6 +43,7 @@ export default function Weather(props) {
             </div>
           </div>
         </form>
+
         <h1>{weatherData.city}</h1>
         <ul>
           <li>
@@ -52,8 +55,8 @@ export default function Weather(props) {
           <div className="col-6">
             <div className="clearfix">
               <img
-                src="{weatherData.iconUrl}"
-                alt="{weatherData.description}"
+                src={weatherData.iconUrl}
+                alt={weatherData.description}
                 className="float-left"
               />
               <div className="float-left">
@@ -74,8 +77,8 @@ export default function Weather(props) {
       </div>
     );
   } else {
-    const apiKey = "f3009e4852fa0a079dab291dabf020c4b";
-    let apiUrl = `https://api.openweathermap/data/2.5/weather?q=${props.defaultCity}&appid=${apiKey}&units=metric`;
+    const apiKey = "aa8be038534a124at608fo4af5b10b9a";
+    let apiUrl = `https://api.shecodes.io/weather/v1/current?query=${props.defaultCity}&key=${apiKey}&units=metric`;
     axios.get(apiUrl).then(handleResponse);
 
     return "Loading...";
